@@ -1,0 +1,15 @@
+1. 
+
+ok so i learned a very basic and obvious thing that we have to fetch 3 components okay so we just have to remove 2 edges to make 3 components in a graph
+no need to run 3 loops in every vertex instead run 2 loops in edges 
+in tree when u cut any 2 edges in any position it is guarentee that it will give u three distinct components 
+
+
+2.
+
+so we have to XOR from bottom to upwards means we have to move upwards from bottom 
+means if 0 is the root node than all the XOR value of every node will be in the root node right 
+if n == 5 then suppose root have 1^2^3^4^5
+and we have to remove 2 edges so just traverse on the edges and whichever vertex u encounter do nums[vertex1] ^ nums[0] where nums[0] is the root node 
+so suppose vertex1 contains the XOR value as 3^4^5 and nums[0] is 1^2^3^4^5 so  (3^4^5) ^ (1^2^3^4^5) will give u (1^2) which is the second component
+same for vertex 2 also 
