@@ -13,3 +13,11 @@ if n == 5 then suppose root have 1^2^3^4^5
 and we have to remove 2 edges so just traverse on the edges and whichever vertex u encounter do nums[vertex1] ^ nums[0] where nums[0] is the root node 
 so suppose vertex1 contains the XOR value as 3^4^5 and nums[0] is 1^2^3^4^5 so  (3^4^5) ^ (1^2^3^4^5) will give u (1^2) which is the second component
 same for vertex 2 also 
+
+3.
+
+Tracking Ancestry (isAncestor Matrix)
+This part:
+isAncestor[ancestor][src] = true;
+…teaches you a beautiful hack: when exploring subtree relationships, you can build a matrix that answers:
+"Is node A an ancestor of node B?"

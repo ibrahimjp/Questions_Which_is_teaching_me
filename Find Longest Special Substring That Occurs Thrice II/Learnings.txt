@@ -1,0 +1,71 @@
+youtube vedio (for learning hashing) :- https://youtu.be/io9yJ-KelgE?si=B4FR3yJZYtQIki0K 
+
+Ok so Listen Carefully now 
+Here in this Solution.java file there is an optimal code and the bruteForce too go and watch both the code there is a great difference in time complexity
+now what the brute force code say that given a len (by binary search) fetch all the substring from string of that len and check whether that substring
+ocuurs 3 time in an string itself so we check it brute forcly like hash map 
+
+# this question is all about Hashing (it is a very important technique)
+just because of hashi we reduced our time complexity from n^3 log n (to) n log n 
+
+# What is a Hash Function?
+Imagine you have a string like "abc" and you want to give it a unique number. A hash function takes input (like "abc") and converts it into a number (like 123456) in such a way that:
+It's fast to compute,
+Two different strings will (ideally) give different numbers,
+And the same string always gives the same number.
+This is like turning words into numbers.
+Now, imagine you're asked:
+"In a string, how many times does the substring 'aaa' occur?"
+If the string is long (like a million letters!), checking each 'aaa' directly is slow. Instead, if we convert every substring to a number (a hash), we can compare numbers instead of strings — and that's MUCH faster.
+
+# Why Do We Need Hashes in Your Code?
+
+You're solving this problem:
+Find the maximum length L such that there exists some character like 'a' and a substring like 'aaa...a' of length L that appears at least 3 times in the string.
+But checking every possible substring for every possible length — and comparing if it's all 'a's or 'b's etc. — is too slow. It takes O(n²) time. That’s bad if n = 1e5.
+So you use hashing to convert substrings to numbers. Comparing numbers is O(1). So instead of comparing strings character-by-character, you just compare their hashes
+
+# The Hash Function Formula (Rolling Hash)
+The rolling hash you're using is based on the polynomial hash technique.
+Here's the idea:
+For a string s = "abc", let’s convert each character:
+'a' = 1
+'b' = 2
+'c' = 3
+(Generally: val = s.charAt(i) - 'a' + 1)
+We build a hash like this:
+hash("abc") = 1×P¹ + 2×P² + 3×P³
+
+
+# Rolling Hash (Why "Rolling"?)
+Let’s say you have a long string, and you want to compute hashes for all substrings of length L.
+
+Instead of recalculating the full hash every time from scratch, you:
+
+Precompute prefix hashes
+
+Use a formula to compute any substring hash in O(1)
+
+👇 Prefix Hash Formula:
+Let pref[i] be the hash of the prefix s[0...i-1].
+Then:
+hash(s[l...r]) = (pref[r] - pref[l-1] + MOD) * inv_pwr[l-1] % MOD
+🧠 Why this works:
+pref[r] includes s[0...r-1]
+pref[l-1] includes s[0...l-2]
+So their difference gives the hash of s[l-1...r-1]
+But this value has weights of powers of P starting from P^l to P^r
+So you divide it by P^(l-1) to normalize it using the modular inverse
+Hence, you get the true hash of the substring [l...r]
+
+# Final Tip:
+
+Whenever you see problems involving:
+
+Substring comparisons
+Count of repeated substrings
+Palindromes
+Dictionary of patterns
+
+Think of hashing first. It’s often the best approach.
+
