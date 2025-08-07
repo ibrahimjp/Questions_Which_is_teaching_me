@@ -1,3 +1,5 @@
+import java.util.*;
+
 class Solution {
     public int minimumDiameterAfterMerge(int[][] edges1, int[][] edges2) {
         List<List<Integer>> edgeList1 = convertToList(edges1);
