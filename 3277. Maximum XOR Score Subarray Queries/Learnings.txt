@@ -1,0 +1,142 @@
+credit :- https://www.youtube.com/watch?v=alNyC5qWrx4&ab_channel=AmitDhyani
+
+question are are many queries and for every querieshave left and right and for every left and right in the nums 
+find out its all the subarrays and suppose the subarray is [7,8,5,3]
+then you can do this operatiosn :- 
+- Simultaneously replace a[i] with a[i] XOR a[i + 1] for all indices i except the last one.
+- Remove the last element of a.
+
+approach and the observations :-
+
+suppose you have l and r and the l and r looks like [x1,x2,x3,x4,x5] in the nums
+
+now find all its subarray ans then take the maximum XOR value out of it 
+then what u can do 
+queries[i] = [x1,x2];
+
+[x1,x2,x3,x4,x5] // 5 elements
+
+[x1^x2 , x2^x3 , x3^x4 , x4^x5] // 4 elements
+
+[(x1^x2)^(x2^x3),  (x2^x3)^(x3^x4),  (x3^x4)^(x4^x5)]    // length = 3
+
+[(x1^x3)^(x2^x4),  (x2^x4)^(x3^x5)]    // length = 2
+
+[x1 ^ x5]    // length = 1
+
+
+means to find the maximum XOR value between l and r 
+len = 1:   a     b     c     d
+len = 2:   a^b   b^c   c^d
+len = 3:   a^b^c b^c^d
+len = 4:   a^b^c^d
+
+
+Let’s say nums = [a, b, c, d].
+For len = 2:
+
+i=0, j=1:  xScore[0][1] = xScore[0][0] ^ xScore[1][1] = a ^ b
+i=1, j=2:  xScore[1][2] = xScore[1][1] ^ xScore[2][2] = b ^ c
+i=2, j=3:  xScore[2][3] = xScore[2][2] ^ xScore[3][3] = c ^ d
+
+# What is xScore[i][j]?
+xScore[i][j] means:
+
+The XOR of the subarray from index i to index j (inclusive).
+
+Example:
+
+If nums = [a, b, c, d]
+xScore[0][2] = a ^ b ^ c
+xScore[1][3] = b ^ c ^ d
+
+
+for len = 1
+nums:  a    b    c    d
+       ↑    ↑    ↑    ↑
+XOR:   a    b    c    d
+
+Building longer ranges using smaller ranges
+xScore[i][j] = XOR(nums[i..j])
+
+
+We can reuse two overlapping smaller results
+xScore[i][j-1] = XOR(nums[i..j-1])
+xScore[i+1][j] = XOR(nums[i+1..j])
+
+
+If you XOR these two, the overlapping middle part cancels out, leaving nums[i] ^ nums[j].
+But here’s the key — in XOR, if we take:
+
+( nums[i] ^ nums[i+1] ^ ... ^ nums[j-1] ) 
+^ ( nums[i+1] ^ ... ^ nums[j-1] ^ nums[j] )
+
+
+
+# how i am doing this : xScore[i][j] = xScore[i][j-1] ^ xScore[i+1][j];
+
+->
+
+Example array
+[x1, x2, x3, x4, x5]   // n = 5
+
+
+Length = 1
+Every subarray of length 1 is just the element itself
+xScore[0][0] = x1
+xScore[1][1] = x2
+xScore[2][2] = x3
+xScore[3][3] = x4
+xScore[4][4] = x5
+
+
+Length = 2
+We take XOR of two adjacent elements:
+
+[x1 ^ x2]   [x2 ^ x3]   [x3 ^ x4]   [x4 ^ x5]
+
+
+
+Length = 3
+To get XOR of x1, x2, x3:
+We know:
+
+xScore[0][1] = x1 ^ x2 (first 2)
+
+xScore[1][2] = x2 ^ x3 (last 2)
+
+xScore[0][2] = xScore[0][1] ^ xScore[1][2]
+             = (x1 ^ x2) ^ (x2 ^ x3)
+             = x1 ^ x3   // because x2 cancels out
+[(x1^x2)^(x2^x3),  (x2^x3)^(x3^x4),  (x3^x4)^(x4^x5)]
+
+Length = 4
+Same idea — use results from length = 3 and cancel middle terms:
+
+[(x1^x3)^(x2^x4),  (x2^x4)^(x3^x5)]
+
+
+- >     Tree-like Diagram
+
+
+Level 1 (len=1):   x1       x2       x3       x4       x5
+                   / \     / \     / \     / \
+Level 2 (len=2): x1^x2  x2^x3  x3^x4  x4^x5
+                 /   \   /   \   /   \
+Level 3 (len=3):x1^x3  x2^x4  x3^x5
+                /  \   /  \
+Level 4 (len=4):x1^x4  x2^x5
+                /  \
+Level 5 (len=5):x1^x5
+
+
+Why xScore[i][j] = xScore[i][j-1] ^ xScore[i+1][j] works
+xScore[i][j-1] = XOR of elements from i to j-1
+
+xScore[i+1][j] = XOR of elements from i+1 to j
+
+XORing them cancels out the middle segment (from i+1 to j-1), leaving nums[i] ^ nums[j] only in effect but extended recursively.
+
+It’s the same pattern as above — build larger segments by combining overlapping smaller segments.
+
+
